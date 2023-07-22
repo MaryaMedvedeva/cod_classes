@@ -1,96 +1,95 @@
-import time
 import random
 
-class Тварина:
-    def __init__(self, вид):
-        self.вид = вид
-        self.ім_я = ""
-        self.вік = 0
-        self.чи_живий = True
-        self.голод = 50
-        self.нудьга = 50
-        self.власник = None
+class Human:
+    def __init__(self, name, age, pet_species, pet_name):
+        self.name = name
+        self.age = age
+        self.pet = Animal(pet_species, pet_name)
 
-    def __str__(self):
-        return f"{self.вид} {self.ім_я} має {self.вік} років."
+    def speak(self, message):
+        print(f"{self.name} говорить: {message}")
 
-    def годувати(self):
-        if self.голод < 30:
-            print(f"{self.ім_я} не голодний(а).")
-        else:
-            self.голод -= 20
-            print(f"{self.ім_я} їсть.")
+    def introduce(self):
+        print(f"Привіт! Мене звуть {self.name}. Мені {self.age} років.")
+        print(f"У мене є тваринний друг. Його/її звуть {self.pet.name}, і це {self.pet.species}.")
 
-    def гратися(self):
-        if self.нудьга < 30:
-            print(f"{self.ім_я} не сумує.")
-        else:
-            self.нудьга -= 20
-            print(f"{self.ім_я} грається.")
+    def interact_with_pet(self):
+        print(f"{self.name}, у вас є {self.pet.species} з ім'ям {self.pet.name}.")
+        for i in range(6):
+            print(f"Раунд {i+1}: виберіть дію для взаємодії з твариною:")
+            print("1 - погодувати")
+            print("2 - пограти")
+            print("3 - відпочити")
+            action = input()
 
-    def чекати(self):
-        self.голод += 5
-        self.нудьга += 5
-        self.вік += 1
-        if self.вік >= 10:
-            self.чи_живий = False
-            print(f"{self.ім_я} помер(ла).")
-        else:
-            print(f"{self.ім_я} чекає.")
+            if action == "1":
+                self.pet.react_to_action("погодувати")
+            elif action == "2":
+                self.pet.react_to_action("пограти")
+            elif action == "3":
+                self.pet.react_to_action("відпочити")
+            else:
+                print("Недопустима дія! Спробуйте ще раз.")
 
-    def показати_опції(self):
-        print(f"Що ви хочете зробити з {self.ім_я}?")
-        print("1. Погодувати")
-        print("2. Погратися")
-        print("3. Чекати")
+            if self.pet.hunger == 2:
+                print(f"{self.pet.name} переїла. Ви програли!")
+                return
+            elif self.pet.boredom == 2:
+                print(f"{self.pet.name} втомилася. Ви програли!")
+                return
+            else:
+                print("Ви виграли!")
 
-    def діяти(self, вибір):
-        if вибір == "1":
-            self.годувати()
-        elif вибір == "2":
-            self.гратися()
-        elif вибір == "3":
-            self.чекати()
+class Animal:
+    def __init__(self, species, name):
+        self.species = species
+        self.name = name
+        self.hunger = 0
+        self.boredom = 0
 
-    def взаємодіяти(self, інша_тварина):
-        print(f"{self.ім_я} спілкується з {інша_тварина.ім_я}.")
+    def make_sound(self, sound):
+        print(f"{self.name} видає звук: {sound}")
 
-    def взаємодіяти_з_власником(self):
-        if self.власник:
-            print(f"{self.ім_я} спілкується з власником {self.власник.ім_я}.")
-        else:
-            print(f"{self.ім_я} немає власника.")
+    def description(self):
+        print(f"Це {self.species} звуть {self.name}.")
 
-    def запустити(self):
-        print(f"Ласкаво просимо до симулятора {self.вид} з {self.ім_я}!")
-        while self.чи_живий:
-            self.показати_опції()
-            вибір = input("> ")
-            while вибір not in ["1", "2", "3"]:
-                print("Недійсний вибір. Будь ласка, введіть 1, 2 або 3.")
-                вибір = input("> ")
-            self.діяти(вибір)
-            time.sleep(2)
+    def react_to_action(self, action):
+        if action == "погодувати":
+            self.hunger -= 1
+            print(f"{self.name} покуштував.")
+        elif action == "пограти":
+            self.boredom -= 1
+            print(f"{self.name} погрався.")
+        elif action == "відпочити":
+            self.hunger += 1
+            self.boredom += 1
+            print(f"{self.name} відпочив.")
 
-# Створюємо Глєба (людину) та його кота та собаку
-глєб = Тварина("Людина")
-глєб.ім_я = "Глєб"
+def story_telling():
+    player1_name = input("Введіть ім'я першої дійової особи: ")
+    player1_age = int(input("Введіть вік першої дійової особи: "))
+    player1_pet_species = input("Введіть вид тварини для першої дійової особи (Кішка або Собака): ")
+    player1_pet_name = input("Введіть ім'я тварини для першої дійової особи: ")
 
-кішка_глєба = Тварина("Кішка")
-кішка_глєба.ім_я = "Ася"
+    player2_name = input("Введіть ім'я другої дійової особи: ")
+    player2_age = int(input("Введіть вік другої дійової особи: "))
+    player2_pet_species = input("Введіть вид тварини для другої дійової особи (Кішка або Собака): ")
+    player2_pet_name = input("Введіть ім'я тварини для другої дійової особи: ")
 
-собака_сюзі = Тварина("Собака")
-собака_сюзі.ім_я = "Ред"
+    player1 = Human(player1_name, player1_age, player1_pet_species, player1_pet_name)
+    player2 = Human(player2_name, player2_age, player2_pet_species, player2_pet_name)
 
-# Встановлюємо власників для кота та собаки
-кішка_глєба.власник = глєб
-собака_сюзі.власник = глєб
+    print("----- Зустріч -----")
+    player1.introduce()
+    player2.introduce()
 
-print(f"{глєб.ім_я} має кота на ім'я {кішка_глєба.ім_я}.")
-print(f"{глєб.ім_я} має собаку на ім'я {собака_сюзі.ім_я}.")
+    print("----- Діалог -----")
+    player1.speak(f"Привіт! Мене звати {player1.name}. А тебе як звати?")
+    player2.speak(f"Привіт! Мене зовуть {player2.name}. Дуже приємно познайомитися!")
+    player1.speak("Також приємно познайомитися!")
 
-for _ in range(4):
-    кішка_глєба.запустити()
-    собака_сюзі.запустити()
+    print("----- Взаємодія з твариною -----")
+    player1.interact_with_pet()
+    player2.interact_with_pet()
 
-print(f"{глєб.ім_я} та {глєб.ім_я} побралися і жили щасливо до самої смерті у віці 78 років.")
+story_telling()
