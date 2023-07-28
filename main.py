@@ -1,5 +1,3 @@
-import random
-
 class Human:
     def __init__(self, name, age, pet_species, pet_name):
         self.name = name
@@ -7,7 +5,7 @@ class Human:
         self.pet = Animal(pet_species, pet_name)
 
     def speak(self, message):
-        print(f"{self.name} говорить: {message}")
+        print(f"{self.name}: {message}")
 
     def introduce(self):
         print(f"Привіт! Мене звуть {self.name}. Мені {self.age} років.")
@@ -16,7 +14,7 @@ class Human:
     def interact_with_pet(self):
         print(f"{self.name}, у вас є {self.pet.species} з ім'ям {self.pet.name}.")
         for i in range(6):
-            print(f"Раунд {i+1}: виберіть дію для взаємодії з твариною:")
+            print(f"Раунд {i + 1}: виберіть дію для взаємодії з твариною:")
             print("1 - погодувати")
             print("2 - пограти")
             print("3 - відпочити")
@@ -31,14 +29,21 @@ class Human:
             else:
                 print("Недопустима дія! Спробуйте ще раз.")
 
-            if self.pet.hunger == 2:
+            if self.pet.hunger == 2 and self.pet.boredom == 2:
+                print(f"{self.pet.name} переїла і втомилася. Ви програли!")
+                return
+            elif self.pet.hunger == 2:
                 print(f"{self.pet.name} переїла. Ви програли!")
                 return
             elif self.pet.boredom == 2:
                 print(f"{self.pet.name} втомилася. Ви програли!")
                 return
-            else:
+            elif i == 5:
                 print("Ви виграли!")
+
+            if i < 5:
+                print(f"Залишилося спроб: {5 - i - 1}")
+
 
 class Animal:
     def __init__(self, species, name):
@@ -65,15 +70,16 @@ class Animal:
             self.boredom += 1
             print(f"{self.name} відпочив.")
 
+
 def story_telling():
     player1_name = input("Введіть ім'я першої дійової особи: ")
     player1_age = int(input("Введіть вік першої дійової особи: "))
-    player1_pet_species = input("Введіть вид тварини для першої дійової особи (Кішка або Собака): ")
+    player1_pet_species = input("Введіть вид тварини для першої дійової особи (Кішка, Собака, тощо): ")
     player1_pet_name = input("Введіть ім'я тварини для першої дійової особи: ")
 
     player2_name = input("Введіть ім'я другої дійової особи: ")
     player2_age = int(input("Введіть вік другої дійової особи: "))
-    player2_pet_species = input("Введіть вид тварини для другої дійової особи (Кішка або Собака): ")
+    player2_pet_species = input("Введіть вид тварини для другої дійової особи (Кішка, Собака, тощо): ")
     player2_pet_name = input("Введіть ім'я тварини для другої дійової особи: ")
 
     player1 = Human(player1_name, player1_age, player1_pet_species, player1_pet_name)
@@ -84,12 +90,13 @@ def story_telling():
     player2.introduce()
 
     print("----- Діалог -----")
-    player1.speak(f"Привіт! Мене звати {player1.name}. А тебе як звати?")
-    player2.speak(f"Привіт! Мене зовуть {player2.name}. Дуже приємно познайомитися!")
+    player1.speak(f"Привіт! Мене звати {player1.name}. Мені {player1_age} років. А тебе як звати?")
+    player2.speak(f"Привіт! Мене зовуть {player2.name}. Мені {player2_age} років. Дуже приємно познайомитися!")
     player1.speak("Також приємно познайомитися!")
 
     print("----- Взаємодія з твариною -----")
     player1.interact_with_pet()
     player2.interact_with_pet()
+
 
 story_telling()
